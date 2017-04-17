@@ -67,6 +67,16 @@ public :
    TH1F           *h_eff_theta_pi;
    TH1F           *h_eff_phi_pi;
 
+   TH1F           *h_multy_mpd;
+
+   TProfile       *h_pro_p;
+   TProfile       *h_pro_k;
+   TProfile       *h_pro_pi;
+
+   TH2F           *h_corr_pt_p;
+   TH2F           *h_corr_pt_k;
+   TH2F           *h_corr_pt_pi;
+
    // Declaration of leaf types
    Float_t         b_mc;
    Float_t         phiEP_mc;
@@ -207,12 +217,12 @@ cbmsim_reduced::cbmsim_reduced(TString string) : fChain(0)
    h_pt_mc_k = new TH1F("h_pt_mc_k","kaon pt mc",50,0.0,4.0);h_pt_mc_k->Sumw2();
    h_pt_mc_pi = new TH1F("h_pt_mc_pi","pion pt mc",50,0.0,4.0);h_pt_mc_pi->Sumw2();
 
-   h_eta_mpd_p = new TH1F("h_eta_mpd_p","proton eta",50,0.0,4.0);h_eta_mpd_p->Sumw2();
-   h_eta_mpd_k = new TH1F("h_eta_mpd_k","kaon eta",50,0.0,4.0);h_eta_mpd_k->Sumw2();
-   h_eta_mpd_pi = new TH1F("h_eta_mpd_pi","pion eta",50,0.0,4.0);h_eta_mpd_pi->Sumw2();
-   h_eta_mc_p = new TH1F("h_eta_mc_p","proton eta mc",50,0.0,4.0);h_eta_mc_p->Sumw2();;
-   h_eta_mc_k = new TH1F("h_eta_mc_k","kaon eta mc",50,0.0,4.0);h_eta_mc_k->Sumw2();;
-   h_eta_mc_pi = new TH1F("h_eta_mc_pi","pion eta mc",50,0.0,4.0);h_eta_mc_pi->Sumw2();;
+   h_eta_mpd_p = new TH1F("h_eta_mpd_p","proton eta",50,-2.0,2.0);h_eta_mpd_p->Sumw2();
+   h_eta_mpd_k = new TH1F("h_eta_mpd_k","kaon eta",50,-2.0,2.0);h_eta_mpd_k->Sumw2();
+   h_eta_mpd_pi = new TH1F("h_eta_mpd_pi","pion eta",50,-2.0,2.0);h_eta_mpd_pi->Sumw2();
+   h_eta_mc_p = new TH1F("h_eta_mc_p","proton eta mc",50,-2.0,2.0);h_eta_mc_p->Sumw2();;
+   h_eta_mc_k = new TH1F("h_eta_mc_k","kaon eta mc",50,-2.0,2.0);h_eta_mc_k->Sumw2();;
+   h_eta_mc_pi = new TH1F("h_eta_mc_pi","pion eta mc",50,-2.0,2.0);h_eta_mc_pi->Sumw2();;
    
    h_theta_mpd_p = new TH1F("h_theta_mpd_p","proton theta",50,0.0,4.0);h_theta_mpd_p->Sumw2();
    h_theta_mpd_k = new TH1F("h_theta_mpd_k","kaon theta",50,0.0,4.0);h_theta_mpd_k->Sumw2();
@@ -243,8 +253,16 @@ cbmsim_reduced::cbmsim_reduced(TString string) : fChain(0)
    h_eff_theta_pi = new TH1F("h_eff_theta_pi","efficiency",50,0.0,4.0);h_eff_theta_pi->Sumw2();
    h_eff_phi_pi = new TH1F("h_eff_phi_pi","efficiency",50,0.0,4.0);h_eff_phi_pi->Sumw2();
 
-}
+   h_corr_pt_p = new TH2F("h_corr_pt_p","Correlation pt between mc & mpd",50,0.0,2.0,50,0.0,0.1);
+   h_corr_pt_k = new TH2F("h_corr_pt_k","Correlation pt between mc & mpd",50,0.0,2.0,50,0.0,0.1);
+   h_corr_pt_pi = new TH2F("h_corr_pt_pi","Correlation pt between mc & mpd",50,0.0,2.0,50,0.0,0.1);
 
+   h_multy_mpd = new TH1F("h_multy_mpd","Multiplicity of mpd",100,0.0,600.0);h_multy_mpd->Sumw2();
+
+   h_pro_p = new TProfile("h_pro_p","Profile hist of proton pt Correlation",50,0.0,4.0,0.0,4.0);
+   h_pro_k = new TProfile("h_pro_k","Profile hist of kaon pt Correlation",50,0.0,4.0,0.0,4.0);
+   h_pro_pi = new TProfile("h_pro_pi","Profile hist of pion pt Correlation",50,0.0,4.0,0.0,4.0);
+}
 
 
 cbmsim_reduced::cbmsim_reduced(TTree *tree) : fChain(0) 
@@ -271,12 +289,12 @@ cbmsim_reduced::cbmsim_reduced(TTree *tree) : fChain(0)
    h_pt_mc_k = new TH1F("h_pt_mc_k","kaon pt mc",50,0.0,4.0)h_pt_mc_k->Sumw2();
    h_pt_mc_pi = new TH1F("h_pt_mc_pi","pion pt mc",50,0.0,4.0)h_pt_mc_pi->Sumw2();
 
-   h_eta_mpd_p = new TH1F("h_eta_mpd_p","proton eta",50,0.0,4.0);h_pt_mpd_p->Sunw2();
-   h_eta_mpd_k = new TH1F("h_eta_mpd_k","kaon eta",50,0.0,4.0);h_pt_mpd_k->Sunw2();
-   h_eta_mpd_pi = new TH1F("h_eta_mpd_pi","pion eta",50,0.0,4.0);h_pt_mpd_pi->Sunw2();
-   h_eta_mc_p = new TH1F("h_eta_mc_p","proton eta mc",50,0.0,4.0)h_pt_mc_p->Sumw2();;
-   h_eta_mc_k = new TH1F("h_eta_mc_k","kaon eta mc",50,0.0,4.0)h_pt_mc_k->Sumw2();;
-   h_eta_mc_pi = new TH1F("h_eta_mc_pi","pion eta mc",50,0.0,4.0)h_pt_mc_pi->Sumw2();;
+   h_eta_mpd_p = new TH1F("h_eta_mpd_p","proton eta",50,-2.0,2.0);h_pt_mpd_p->Sunw2();
+   h_eta_mpd_k = new TH1F("h_eta_mpd_k","kaon eta",50,-2.0,2.0);h_pt_mpd_k->Sunw2();
+   h_eta_mpd_pi = new TH1F("h_eta_mpd_pi","pion eta",50,-2.0,2.0);h_pt_mpd_pi->Sunw2();
+   h_eta_mc_p = new TH1F("h_eta_mc_p","proton eta mc",50,-2.0,2.0)h_pt_mc_p->Sumw2();;
+   h_eta_mc_k = new TH1F("h_eta_mc_k","kaon eta mc",50,-2.0,2.0)h_pt_mc_k->Sumw2();;
+   h_eta_mc_pi = new TH1F("h_eta_mc_pi","pion eta mc",50,-2.0,2.0)h_pt_mc_pi->Sumw2();;
    
    h_theta_mpd_p = new TH1F("h_theta_mpd_p","proton theta",50,0.0,4.0);h_pt_mpd_p->Sunw2();
    h_theta_mpd_k = new TH1F("h_theta_mpd_k","kaon theta",50,0.0,4.0);h_pt_mpd_k->Sunw2();
@@ -306,6 +324,15 @@ cbmsim_reduced::cbmsim_reduced(TTree *tree) : fChain(0)
    h_eff_eta_pi = new TH1F("h_eff_eta_pi","efficiency",50,0.0,4.0);h_eff_eta_pi->Sumw2();
    h_eff_theta_pi = new TH1F("h_eff_theta_pi","efficiency",50,0.0,4.0);h_eff_theta_pi->Sumw2();
    h_eff_phi_pi = new TH1F("h_eff_phi_pi","efficiency",50,0.0,4.0);h_eff_phi_pi->Sumw2();
+
+   h_corr_pt_p = new TH2F("h_corr_pt_p","Correlation pt between mc & mpd",50,0.0,2.0,0.0,0.1);
+   h_corr_pt_k = new TH2F("h_corr_pt_k","Correlation pt between mc & mpd",50,0.0,2.0,50,0.0,0.1);
+   h_corr_pt_pi = new TH2F("h_corr_pt_pi","Correlation pt between mc & mpd",50,0.0,2.0,50,0.0,0.1);
+
+   h_multy_mpd = new TH1F("h_multy_mpd","Multiplicity of mpd",100,0.0,600.0);h_multy_mpd->Sumw2();
+   h_pro_p = new TProfile("h_pro_p","Profile hist of proton pt Correlation",50,0.0,4.0,0.0,4.0);
+   h_pro_k = new TProfile("h_pro_k","Profile hist of kaon pt Correlation",50,0.0,4.0,0.0,4.0);
+   h_pro_pi = new TProfile("h_pro_pi","Profile hist of pion pt Correlation",50,0.0,4.0,0.0,4.0);
 
 }
 
