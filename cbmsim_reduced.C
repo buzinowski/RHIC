@@ -32,7 +32,7 @@ void cbmsim_reduced::Loop(TString string)
    if (fChain == 0) return;
    Int_t counter = 0;
    
-   Int_t* Multi = new Int_t[250];
+   //Int_t* Multi = new Int_t[250];
    Long64_t nentries = fChain->GetEntriesFast();
 
    Long64_t nbytes = 0, nb = 0;
@@ -64,7 +64,7 @@ void cbmsim_reduced::Loop(TString string)
             h_eta_mpd_k->Fill(eta_mpd[itracks]);
             h_theta_mpd_k->Fill(TMath::Abs(theta_mpd[itracks]));
             h_phi_mpd_k->Fill(TMath::Abs(phi_mpd[itracks]));
-         	h_corr_pt_k->Fill((TMath::Abs(pt_mc[id_from_mc_mpd[itracks]])),(TMath::Abs(signed_pt_mpd[itracks])-pt_mc[id_from_mc_mpd[itracks]])/(TMath::Abs(signed_pt_mpd[itracks])));
+            h_corr_pt_k->Fill((TMath::Abs(pt_mc[id_from_mc_mpd[itracks]])),(TMath::Abs(signed_pt_mpd[itracks])-pt_mc[id_from_mc_mpd[itracks]])/(TMath::Abs(signed_pt_mpd[itracks])));
          }
          if(PDG_code_mc[id_from_mc_mpd[itracks]]==211)//pions
          {
@@ -75,7 +75,7 @@ void cbmsim_reduced::Loop(TString string)
             h_corr_pt_pi->Fill((TMath::Abs(pt_mc[id_from_mc_mpd[itracks]])),(TMath::Abs(signed_pt_mpd[itracks])-pt_mc[id_from_mc_mpd[itracks]])/(TMath::Abs(signed_pt_mpd[itracks])));
 
          }
-    	Multi[jentry] = tracks;
+    	//Multi[jentry] = tracks;
     	h_multy_mpd->Fill(tracks);
 
   		}
@@ -112,22 +112,14 @@ void cbmsim_reduced::Loop(TString string)
 
 }
    
-   	
-   	
-	h_eff_pt_p->Divide(h_pt_mpd_p,h_pt_mc_p);
+   	h_eff_pt_p->Divide(h_pt_mpd_p,h_pt_mc_p);
 	h_eff_pt_k->Divide(h_pt_mpd_k,h_pt_mc_k);
 	h_eff_pt_pi->Divide(h_pt_mpd_pi,h_pt_mc_pi);
    
-
-	
    
    TH1F* h_pt_difference = (TH1F*)h_pt_mc->Clone("h_pt_difference");
    Float_t  diference = 0;
-   // for (Int_t i =0; i<h_pt_mpd->GetEntries(); i++)
-   // {
-   //       diference = h_pt_mpd[i] - h_pt_mc[i];
-   //       h_pt_difference->Fill(diference);
-   // }
+   
    h_pt_difference->Add(h_pt_mpd,-1);
    TFile *foutput=new TFile(string.Data(),"recreate");
    foutput->cd();
